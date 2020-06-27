@@ -1,0 +1,223 @@
+from django.shortcuts import render , redirect
+from .models import Candidate
+from bokeh.plotting import figure, output_file , show
+from bokeh.embed import components
+import pandas as pd
+from .filters import CandidateFilter
+import numpy as np
+
+
+
+# Create your views here.
+def Candidateinfo(request):
+    cand = Candidate.objects.all()
+    return render(request, "my.htm" ,{'can' : cand  })
+
+def search(request):
+    candidate_list = Candidate.objects.all().values()
+    candidate_filter = CandidateFilter(request.GET, queryset=candidate_list)
+    return render(request, 'my_template.html', {'filter':candidate_filter})
+
+
+def main_view(request):
+    qs = Candidate.objects.all().values()
+    dataM = pd.DataFrame(qs)
+    inp1 =  request.GET.get('year')
+    print(inp1)
+    print(type(inp1))
+    inp = int(inp1)
+    print(inp)
+    print(type(inp))
+    data = dataM[dataM.last_passout_year == inp]
+    
+
+    dataA = data.groupby('reference_source').size().to_frame('total no of count').reset_index()
+    data2 = dataA[dataA.columns[0]].to_numpy()
+    data3 = dataA[dataA.columns[1]].to_numpy()
+
+    dataB = data.groupby('gender').size().to_frame('total no of count').reset_index()
+    data4 = dataB[dataB.columns[0]].to_numpy()
+    data5 = dataB[dataB.columns[1]].to_numpy()
+
+    dataC = data.groupby('graduate_degree').size().to_frame('total no of count').reset_index()
+    data6 = dataC[dataC.columns[0]].to_numpy()
+    data7 = dataC[dataC.columns[1]].to_numpy() 
+
+    dataD = data.groupby('pg_degree').size().to_frame('total no of count').reset_index()
+    data8 = dataD[dataD.columns[0]].to_numpy()
+    data9 = dataD[dataD.columns[1]].to_numpy()   
+
+    dataE = data.groupby('graduate_stream').size().to_frame('total no of count').reset_index()
+    data10 = dataE[dataE.columns[0]].to_numpy()
+    data11= dataE[dataE.columns[1]].to_numpy()  
+
+    dataF = data.groupby('pg_stream').size().to_frame('total no of count').reset_index()
+    data12 = dataF[dataF.columns[0]].to_numpy()
+    data13= dataF[dataF.columns[1]].to_numpy()   
+
+    dataG = data.groupby('pg_yes_or_no').size().to_frame('total no of count').reset_index()
+    data14 = dataG[dataG.columns[0]].to_numpy()
+    data15= dataG[dataG.columns[1]].to_numpy()  
+
+    dataH = data.groupby('freshers').size().to_frame('total no of count').reset_index()
+    data16 = dataH[dataH.columns[0]].to_numpy()
+    data17= dataH[dataH.columns[1]].to_numpy() 
+
+    dataI = data.groupby('state_location').size().to_frame('total no of count').reset_index()
+    data18 = dataI[dataI.columns[0]].to_numpy()
+    data19= dataI[dataI.columns[1]].to_numpy()  
+
+    dataJ = data.groupby('purpuse_of_visit').size().to_frame('total no of count').reset_index()
+    data20 = dataJ[dataJ.columns[0]].to_numpy()
+    data21= dataJ[dataJ.columns[1]].to_numpy()  
+
+    dataK = data.groupby('domain_interested').size().to_frame('total no of count').reset_index()
+    data22 = dataK[dataK.columns[0]].to_numpy()
+    data23= dataK[dataK.columns[1]].to_numpy()  
+
+    dataL = data.groupby('joined_yes_no').size().to_frame('total no of count').reset_index()
+    data24 = dataL[dataL.columns[0]].to_numpy()
+    data25= dataL[dataL.columns[1]].to_numpy() 
+    
+
+
+    a = data2 
+    b = data3
+    plot = figure(x_range= a , plot_height=200, title="REFERENCE SOURCE",
+           toolbar_location=None, tools="")
+    plot.vbar(x= a , top= b , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    aa , bb = components(plot)
+
+    c = data4
+    d = data5
+    plot = figure(x_range= c , plot_height=200, title="gender",
+           toolbar_location=None, tools="")
+    plot.vbar(x= c , top= d , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    cc , dd = components(plot)
+
+    e = data6 
+    f = data7
+    plot = figure(x_range= e , plot_height=200, title="graduate_degree",
+           toolbar_location=None, tools="")
+    plot.vbar(x= e , top= f , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    ee , ff = components(plot)
+
+    g = data8 
+    h = data9
+    plot = figure(x_range= g , plot_height=200, title="pg_degree",
+           toolbar_location=None, tools="")
+    plot.vbar(x= g , top= h , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    gg , hh = components(plot)
+
+    i = data10 
+    j = data11
+    plot = figure(x_range= i , plot_height=200, title="graduate_stream",
+           toolbar_location=None, tools="")
+    plot.vbar(x= i , top= j , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    ii , jj = components(plot)
+
+    k = data12 
+    l = data13
+    plot = figure(x_range= k , plot_height=200, title="pg_stream",
+           toolbar_location=None, tools="")
+    plot.vbar(x= k , top= l , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    kk , ll = components(plot)
+
+    m = data14 
+    n = data15
+    plot = figure(x_range= m , plot_height=200, title="REFERENCE SOURCE",
+           toolbar_location=None, tools="")
+    plot.vbar(x= m , top= n , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    mm , nn = components(plot)
+
+    o = data16 
+    p = data17
+    plot = figure(x_range= o , plot_height=200, title="REFERENCE SOURCE",
+           toolbar_location=None, tools="")
+    plot.vbar(x= o , top= p , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    oo , pp = components(plot)
+
+    q = data18 
+    r = data19
+    plot = figure(x_range= q , plot_height=200, title="REFERENCE SOURCE",
+           toolbar_location=None, tools="")
+    plot.vbar(x= q , top= r , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    qq , rr = components(plot)
+
+    s = data20 
+    t = data21
+    plot = figure(x_range= s , plot_height=200, title="REFERENCE SOURCE",
+           toolbar_location=None, tools="")
+    plot.vbar(x= s , top= t , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    ss , tt = components(plot)
+
+    u = data22 
+    v = data23
+    plot = figure(x_range= u , plot_height=200, title="REFERENCE SOURCE",
+           toolbar_location=None, tools="")
+    plot.vbar(x= u , top= v , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    uu , vv = components(plot)
+
+    w = data24 
+    x = data25
+    plot = figure(x_range= w , plot_height=200, title="REFERENCE SOURCE",
+           toolbar_location=None, tools="")
+    plot.vbar(x= w , top= x , width=0.5)
+    plot.xgrid.grid_line_color = None
+    plot.y_range.start = 0
+    ww , xx = components(plot)
+
+
+
+    context = {
+      'data':data.to_html(),
+      'aa':aa,
+      'bb': bb,
+      'cc': cc,
+      'dd': dd,
+      'ee':ee,
+      'ff': ff,
+      'gg':gg,
+      'hh':hh,
+      'ii': ii,
+      'jj': jj,
+      'kk':kk,
+      'll':ll,
+      'mm':mm,
+      'nn':nn,
+      'oo':oo,
+      'pp':pp,
+      'qq':qq,
+      'rr':rr,
+      'ss':ss,
+      'tt':tt,
+      'uu':uu,
+      'vv':vv,
+      'ww':ww,
+      'xx':xx,    
+    }
+    
+    return render(request, 'main.html', context)
+
